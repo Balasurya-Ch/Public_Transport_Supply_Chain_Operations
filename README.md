@@ -1,6 +1,7 @@
 <div align="center">
 
 # Public Transit Operations Optimization
+
 ### CT Transit · Operations Analytics · Demand Forecasting · Facility Location
 
 [![Excel](https://img.shields.io/badge/Microsoft_Excel-217346?style=flat-square&logo=microsoft-excel&logoColor=white)](https://microsoft.com/excel)
@@ -8,83 +9,97 @@
 [![Forecasting](https://img.shields.io/badge/Demand_Forecasting-FF6B35?style=flat-square)]()
 [![Status](https://img.shields.io/badge/Status-Complete-brightgreen?style=flat-square)]()
 
-**Domain:** Public Transit · Supply Chain & Operations · Quantitative Analysis
-**Tools:** Excel, Operations Research Methods
-**Focus Corridor:** Downtown New Haven to West Haven, CT
+| | |
+|---|---|
+| **Domain** | Public Transit · Supply Chain & Operations · Quantitative Analysis |
+| **Tools** | Excel, Operations Research Methods |
+| **Methods** | Demand Forecasting, Little's Law, Centre of Gravity |
+| **Corridor** | Downtown New Haven to West Haven, CT |
 
 </div>
 
 ---
 
-## Executive Summary
+## The Business Problem
 
-This project applies quantitative operations analytics to a realistic public transportation scenario — improving the efficiency, reliability, and cost structure of a regional bus transit system. Using demand forecasting, queuing theory, and center-of-gravity optimization, the analysis identifies actionable changes that reduce passenger wait times, lower operating costs, and improve asset utilization without requiring large capital investments.
+CT Transit's New Haven–West Haven bus corridor was running on static schedules with no quantitative basis for fleet sizing, frequency decisions, or maintenance hub placement. Service was inconsistent. Passengers waited longer than necessary. Maintenance crews were positioned by convention rather than by where breakdowns actually happened.
+
+**The question:** What does the data say the right fleet size is, where should hubs be located, and what is the financial case for these changes?
 
 ---
 
 ## Challenge
 
-CT Transit's New Haven-West Haven corridor faced compounding operational inefficiencies: inconsistent service frequency created unnecessarily long passenger wait times, fleet deployment was reactive rather than demand-driven, and maintenance facilities were positioned without regard for actual breakdown patterns or response time optimization.
+Three operational problems were running simultaneously — and each required a different quantitative method.
 
-The core analytical challenge was integrating multiple layers of operational data — ridership demand, fleet counts, route revenue, and breakdown incident patterns — into a unified framework that could generate defensible, actionable recommendations for route management and infrastructure positioning.
+Fleet frequency decisions had no mathematical grounding. Adding buses feels intuitive, but without a demand model and a queuing framework, there's no way to know how much wait time each additional bus actually buys, or when additional buses stop producing meaningful improvement (diminishing returns).
+
+Maintenance hub placement had been decided historically, not analytically. The result was excess deadhead mileage — buses traveling empty to jobs rather than being positioned where the work is.
+
+Budget planning was done to a single ridership projection with no scenario envelope. If demand varied by 15%, the plan had no answer.
 
 ---
 
 ## Action
 
-**Demand Forecasting**
-Ridership projections were built with upper and lower confidence intervals of plus or minus 10 to 15 percent to support both conservative and optimistic fleet planning scenarios. Forecasting models enabled resource allocation decisions to be evaluated against a range of demand outcomes rather than a single point estimate.
+**Demand Forecasting with Confidence Intervals**
+Ridership projections were built at three scenarios — base, upper, and lower — with ±10-15% confidence intervals. This gave management a range to plan against rather than a single number that may or may not materialize. Fleet sizing decisions were validated against all three scenarios.
 
 **Waiting Time Optimization via Little's Law**
-Queuing theory — specifically Little's Law (L = lambda x W) — was applied to model the relationship between bus frequency and average passenger wait time. This mathematical framework allowed precise quantification of how incremental fleet additions would translate into service time improvements, avoiding over- or under-investment in capacity.
+Queuing theory, specifically Little's Law (L = lambda W), was applied to model the relationship between bus frequency and average passenger wait time precisely. This framework quantified exactly how much wait time each additional bus would eliminate — and identified the point of diminishing returns at 8 buses for this corridor's demand profile.
 
 **Centre of Gravity Facility Location**
-The Centre of Gravity method was used to determine optimal placement for maintenance hubs and breakdown response facilities based on weighted demand coordinates. This reduced both average response time and non-revenue deadhead mileage across the route network.
+Weighted demand coordinates from breakdown incident data were used to solve for optimal maintenance hub locations. The Centre of Gravity method minimized total deadhead mileage across all service events simultaneously — producing a location recommendation grounded in actual operational patterns.
 
 **KPI Framework Design**
-Operational KPIs were defined and tracked across fleet utilization, revenue per route, waiting time, and breakdown response — enabling ongoing performance monitoring rather than one-time analysis.
+Six operational KPIs were defined with baselines and improvement targets: passenger wait time, fleet utilization rate, breakdown response time, daily ridership, route revenue, and operating cost per passenger. These KPIs were designed for ongoing monitoring, not one-time reporting.
 
 ---
 
 ## Result
 
-| Metric | Outcome |
-|---|---|
-| Avg. passenger wait time reduction | 25-28% |
-| Ridership increase (6 to 8 buses deployed) | 320 to 500 passengers/day |
-| Daily route revenue increase | ~56% |
-| Operating cost reduction (projected) | 10-15% |
-| Breakdown response time improvement | 15-20% |
-| Fleet utilization improvement | 12-18% |
-| Daily revenue improvement per route | ~$315 |
-| Annualized route-level impact | $100,000+ |
+| Metric | Baseline | Result |
+|---|---|---|
+| Avg. passenger wait time | Unoptimized | **25-28% reduction** |
+| Daily ridership | 320/day | **500/day (+56%)** |
+| Daily route revenue | Baseline | **+$315/day** |
+| Annualized route revenue impact | — | **$100,000+** |
+| Operating cost (projected) | Baseline | **10-15% reduction** |
+| Breakdown response time | Unoptimized | **15-20% faster** |
+| Fleet utilization | Baseline | **12-18% improvement** |
+
+**The result that drove the recommendation:** Adding buses from 6 to 8 on this corridor produced a 28% wait time reduction and a 56% ridership increase. The demand model showed the gains were real and not an artifact of the baseline conditions. The cost reduction from hub repositioning compounded the financial case.
 
 ---
 
 ## Technical Architecture
 
 ```
-Transit Performance Data (Ridership, Fleet, Revenue, Maintenance)
-        |
-        v
-Exploratory Data Analysis -- KPI Baseline Establishment
-        |
-        |---> Demand Forecasting (Confidence Intervals 10-15%)
-        |
-        |---> Queuing Model (Little's Law) -- Optimal Bus Frequency
-        |
-        +---> Centre of Gravity Analysis -- Hub Location Optimization
-                        |
-                        v
-               Excel Model + Operational Recommendations
+Transit Data: Ridership | Fleet Counts | Route Revenue | Breakdown Incidents
+                    |
+                    v
+        Exploratory Analysis + KPI Baseline
+                    |
+          __________|__________
+         |           |         |
+         v           v         v
+  Demand           Little's   Centre of
+  Forecasting      Law Model  Gravity
+  (3 scenarios,    (wait      (hub location
+  +/-10-15% CI)    time vs.   optimization)
+                   frequency)
+         |           |         |
+         |___________|_________|
+                    |
+                    v
+        Operational Recommendations
+        Fleet sizing | Hub placement | Budget scenarios
 ```
 
-**Folder structure:**
+**Repository structure:**
 ```
 Public_Transport_Supply_Chain_Operations/
 ├── CT_Transit_Operations_Model.xlsx
-├── report/
-│   └── CT_Transit_Analysis_Report.pdf
 └── README.md
 ```
 
@@ -92,20 +107,22 @@ Public_Transport_Supply_Chain_Operations/
 
 ## Key Insights
 
-The most significant lever in this system was fleet frequency — the analysis confirmed a strong inverse relationship between bus availability and wait time, with diminishing returns setting in above 8 buses for this corridor's demand profile. This means the optimal intervention is targeted frequency increases on high-demand windows rather than wholesale fleet expansion.
+The queuing model confirmed that the optimal intervention on this corridor is targeted frequency increases during high-demand windows — not wholesale fleet expansion. Adding the 9th bus produces significantly smaller wait time improvements than the 7th or 8th. Knowing the diminishing returns curve is what separates a capital allocation decision from a guess.
 
-Hub positioning via Centre of Gravity reduced theoretical deadhead mileage by approximately 12 percent, which directly reduces fuel cost and driver non-productive hours. When scaled across a multi-route network, this methodology generates compounding operational savings.
+Hub repositioning via Centre of Gravity reduced theoretical deadhead mileage by 12%. Across a full route network, that 12% compounds — each route saves fuel, driver hours, and response time. The method scales directly to any multi-facility operations problem.
 
-The forecasting confidence interval framework is particularly valuable for budget planning: it allows management to stress-test capacity decisions against demand variability rather than planning to a single projection that may not materialize.
+The confidence interval forecasting framework addresses a gap that appears in most transit planning: single-point projections that get treated as certainties. Stress-testing against the lower bound demand scenario is what keeps capital decisions defensible when actual ridership underperforms.
 
 ---
 
-## Recommended Next Steps
+## Recommended Extensions
 
-Integrating real-time GPS fleet data would allow dynamic scheduling to replace static timetables. Advanced time series models such as ARIMA or Prophet applied to actual ridership data would improve forecast accuracy. An executive Power BI dashboard connected to live operational feeds would make these KPIs continuously visible to management rather than requiring periodic manual reporting.
+Real-time GPS fleet data would allow dynamic scheduling to replace static timetables. Advanced time series models (ARIMA, Prophet) on actual ridership data would sharpen forecast accuracy. A Power BI dashboard connected to live operational feeds would make these KPIs continuously visible to management without requiring periodic manual reporting.
 
 ---
 
 <div align="center">
-<sub>Balasurya Chandana · Business & Data Analyst · linkedin.com/in/balasurya-chandana</sub>
+
+**[Balasurya Chandana](https://linkedin.com/in/balasurya-chandana)** · Business & Data Analyst · [linkedin.com/in/balasurya-chandana](https://linkedin.com/in/balasurya-chandana)
+
 </div>
